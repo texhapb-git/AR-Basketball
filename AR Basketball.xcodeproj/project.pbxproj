@@ -13,6 +13,7 @@
 		12A809C226091AFC006F947D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12A809C026091AFC006F947D /* Main.storyboard */; };
 		12A809C426091AFF006F947D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 12A809C326091AFF006F947D /* Assets.xcassets */; };
 		12A809C726091AFF006F947D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12A809C526091AFF006F947D /* LaunchScreen.storyboard */; };
+		12E03772260E08C8004960B6 /* Tips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E03771260E08C8004960B6 /* Tips.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		12A809C326091AFF006F947D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		12A809C626091AFF006F947D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		12A809C826091AFF006F947D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		12E03771260E08C8004960B6 /* Tips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tips.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +58,48 @@
 		12A809B926091AFC006F947D /* AR Basketball */ = {
 			isa = PBXGroup;
 			children = (
-				12A809BA26091AFC006F947D /* AppDelegate.swift */,
-				12A809BC26091AFC006F947D /* art.scnassets */,
-				12A809BE26091AFC006F947D /* ViewController.swift */,
-				12A809C026091AFC006F947D /* Main.storyboard */,
-				12A809C326091AFF006F947D /* Assets.xcassets */,
-				12A809C526091AFF006F947D /* LaunchScreen.storyboard */,
-				12A809C826091AFF006F947D /* Info.plist */,
+				12E03770260E08AB004960B6 /* Texts */,
+				12E0376D260E06EA004960B6 /* View */,
+				12E0376C260E0695004960B6 /* View Controllers */,
+				12E0376B260E067A004960B6 /* Supporting Files */,
 			);
 			path = "AR Basketball";
+			sourceTree = "<group>";
+		};
+		12E0376B260E067A004960B6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				12A809C326091AFF006F947D /* Assets.xcassets */,
+				12A809BC26091AFC006F947D /* art.scnassets */,
+				12A809BA26091AFC006F947D /* AppDelegate.swift */,
+				12A809C826091AFF006F947D /* Info.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		12E0376C260E0695004960B6 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				12A809BE26091AFC006F947D /* ViewController.swift */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		12E0376D260E06EA004960B6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				12A809C526091AFF006F947D /* LaunchScreen.storyboard */,
+				12A809C026091AFC006F947D /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		12E03770260E08AB004960B6 /* Texts */ = {
+			isa = PBXGroup;
+			children = (
+				12E03771260E08C8004960B6 /* Tips.swift */,
+			);
+			path = Texts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,6 +175,7 @@
 			files = (
 				12A809BF26091AFC006F947D /* ViewController.swift in Sources */,
 				12A809BB26091AFC006F947D /* AppDelegate.swift in Sources */,
+				12E03772260E08C8004960B6 /* Tips.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,7 +324,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N46BF4X43P;
-				INFOPLIST_FILE = "AR Basketball/Info.plist";
+				INFOPLIST_FILE = "AR Basketball/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -307,7 +344,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N46BF4X43P;
-				INFOPLIST_FILE = "AR Basketball/Info.plist";
+				INFOPLIST_FILE = "AR Basketball/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
