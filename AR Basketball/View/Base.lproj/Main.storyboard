@@ -24,29 +24,48 @@
                                     <outletCollection property="gestureRecognizers" destination="D2X-8W-nB9" appends="YES" id="9SP-gf-die"/>
                                 </connections>
                             </arscnView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tip" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k6r-Tb-9XY">
-                                <rect key="frame" x="20" y="64" width="374" height="778"/>
-                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="23"/>
-                                <color key="textColor" systemColor="systemOrangeColor"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="IXT-6y-p2p">
+                                <rect key="frame" x="20" y="64" width="374" height="40"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Счёт: 0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4y7-v7-65W">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="40"/>
+                                        <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="21"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.80000000000000004" alpha="0.24949165239726026" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="c22-Oh-iWG"/>
+                                </constraints>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tips" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="frV-w5-jL2">
+                                <rect key="frame" x="20" y="124" width="374" height="718"/>
+                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="24"/>
+                                <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="k6r-Tb-9XY" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="20" id="4tu-Jk-T0F"/>
+                            <constraint firstItem="IXT-6y-p2p" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="20" id="9v3-QW-t3Y"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="GsS-dJ-CKf"/>
-                            <constraint firstItem="k6r-Tb-9XY" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="20" id="OPk-FZ-8u7"/>
+                            <constraint firstItem="frV-w5-jL2" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="20" id="JPw-O4-MA4"/>
+                            <constraint firstItem="frV-w5-jL2" firstAttribute="top" secondItem="IXT-6y-p2p" secondAttribute="bottom" constant="20" id="Q1i-1l-VH0"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="VpT-BR-CcM"/>
-                            <constraint firstAttribute="trailing" secondItem="k6r-Tb-9XY" secondAttribute="trailing" constant="20" id="Wa9-WZ-Drk"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="frV-w5-jL2" secondAttribute="bottom" constant="20" id="WlQ-nA-y4e"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
-                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="k6r-Tb-9XY" secondAttribute="bottom" constant="20" id="f9k-SG-vCi"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="IXT-6y-p2p" secondAttribute="trailing" constant="20" id="Y6j-4B-ndS"/>
+                            <constraint firstItem="IXT-6y-p2p" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="20" id="kRY-N4-JUJ"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="frV-w5-jL2" secondAttribute="trailing" constant="20" id="pn4-RA-pGy"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="rJc-2c-zQA"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
-                        <outlet property="tipsLabel" destination="k6r-Tb-9XY" id="juM-5f-e83"/>
+                        <outlet property="scoreLabel" destination="4y7-v7-65W" id="YyK-nr-i5g"/>
+                        <outlet property="tipsLabel" destination="frV-w5-jL2" id="54L-Sn-dw3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
@@ -62,9 +81,6 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -5,20 +5,20 @@
 //  Created by Максим Иванов on 21.03.2021.
 //
 
-import UIKit
-import SceneKit
 import ARKit
 
-class ViewController: UIViewController, ARSCNViewDelegate {
-
+class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDelegate {
+    
     // MARK: - @IBOutlets
     
     @IBOutlet var sceneView: ARSCNView!
+    @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var tipsLabel: UILabel!
     
     
     // MARK: - Properties
     let configuration = ARWorldTrackingConfiguration()
+    
     
     private var isHoopAdded = false {
         didSet {
@@ -27,6 +27,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
     }
     
+    var score: Int = 0 {
+        didSet {
+            DispatchQueue.main.async {
+                print(self.score)
+                self.scoreLabel.text = "Счёт: \(self.score)"
+            }
+        }
+    }
+    
+    var isBallBeginContactWithRim = false
+    var isBallEndContactWithRim = true
+    
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -34,9 +47,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Set start tip
         tipsLabel.text = Tips.startTip.rawValue
+        tipsLabel.textColor = .orange
         
         // Set the view's delegate
         sceneView.delegate = self
+        sceneView.scene.physicsWorld.contactDelegate = self
         
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
@@ -48,7 +63,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Detect vertical planes
         configuration.planeDetection = [.horizontal, .vertical]
-
+        
         // Run the view's session
         sceneView.session.run(configuration)
     }
@@ -59,6 +74,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Pause the view's session
         sceneView.session.pause()
     }
+    
+    
     
     // MARK: - Private Methods
     
@@ -78,8 +95,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let ballTexture: UIImage = #imageLiteral(resourceName: "basketball")
         ball.firstMaterial?.diffuse.contents = ballTexture
         
+        
         // Ball node
         let ballNode = SCNNode(geometry: ball)
+        ballNode.name = "ball"
         
         
         // Calculate force matrix for pushing the ball
@@ -90,12 +109,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let forceDirection = SCNVector3(x, y, z)
         
         // Add physics
-        ballNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(node: ballNode ))
+        ballNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(node: ballNode))
         
         ballNode.physicsBody?.mass = 0.570
         
         // Apply force
         ballNode.physicsBody?.applyForce(forceDirection, asImpulse: true)
+        
+        // Set parameters for ball to react with hoop and count score points
+        
+        ballNode.physicsBody?.categoryBitMask = BodyType.ball.rawValue
+        ballNode.physicsBody?.collisionBitMask = BodyType.ball.rawValue | BodyType.board.rawValue | BodyType.rim.rawValue
+        ballNode.physicsBody?.contactTestBitMask = BodyType.topPlane.rawValue | BodyType.bottomPlane.rawValue
         
         
         // Assign camera position to ball
@@ -107,17 +132,71 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     private func getHoopNode() -> SCNNode {
         
         let scene = SCNScene(named: "Hoop.scn", inDirectory: "art.scnassets")!
-        let hoopNode = scene.rootNode.clone()
         
-        hoopNode.physicsBody = SCNPhysicsBody(
+        let hoopNode = SCNNode()
+        
+        let board = scene.rootNode.childNode(withName: "board", recursively: false)!
+        let rim = scene.rootNode.childNode(withName: "rim", recursively: false)!
+        let topPlane = scene.rootNode.childNode(withName: "top plane", recursively: false)!
+        let bottomPlane = scene.rootNode.childNode(withName: "bottom plane", recursively: false)!
+        
+        board.physicsBody = SCNPhysicsBody(
             type: .static,
             shape: SCNPhysicsShape(
-                node: hoopNode,
+                node: board,
                 options: [
                     SCNPhysicsShape.Option.type : SCNPhysicsShape.ShapeType.concavePolyhedron
                 ]
             )
         )
+        
+        board.physicsBody?.categoryBitMask = BodyType.board.rawValue
+        
+        rim.physicsBody = SCNPhysicsBody(
+            type: .static,
+            shape: SCNPhysicsShape(
+                node: rim,
+                options: [
+                    SCNPhysicsShape.Option.type : SCNPhysicsShape.ShapeType.concavePolyhedron
+                ]
+            )
+        )
+        
+        rim.physicsBody?.categoryBitMask = BodyType.rim.rawValue
+        
+        
+        topPlane.physicsBody = SCNPhysicsBody(
+            type: .static,
+            shape: SCNPhysicsShape(
+                node: topPlane,
+                options: [
+                    SCNPhysicsShape.Option.type : SCNPhysicsShape.ShapeType.concavePolyhedron
+                ]
+            )
+        )
+        
+        topPlane.physicsBody?.categoryBitMask = BodyType.topPlane.rawValue
+        topPlane.physicsBody?.collisionBitMask = BodyType.ball.rawValue
+        topPlane.opacity = 0
+        
+        bottomPlane.physicsBody = SCNPhysicsBody(
+            type: .static,
+            shape: SCNPhysicsShape(
+                node: bottomPlane,
+                options: [
+                    SCNPhysicsShape.Option.type : SCNPhysicsShape.ShapeType.concavePolyhedron
+                ]
+            )
+        )
+        
+        bottomPlane.physicsBody?.categoryBitMask = BodyType.bottomPlane.rawValue
+        bottomPlane.physicsBody?.collisionBitMask = BodyType.ball.rawValue
+        bottomPlane.opacity = 0
+        
+        hoopNode.addChildNode(board)
+        hoopNode.addChildNode(rim)
+        hoopNode.addChildNode(topPlane)
+        hoopNode.addChildNode(bottomPlane)
         
         return hoopNode
     }
@@ -154,7 +233,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         plane.height = CGFloat(extent.z)
         
     }
-
+    
+    private func removeFromScene(_ node: SCNNode, fallLengh: Float) {
+        
+        if node.presentation.position.y < fallLengh {
+            node.removeFromParentNode()
+        }
+        
+    }
+    
+    
+    
     
     // MARK: - ARSCNViewDelegate
     
@@ -165,8 +254,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
         
         DispatchQueue.main.async {
-             self.tipsLabel.textColor = .white
-             self.tipsLabel.text = Tips.placeHoop.rawValue
+            self.tipsLabel.textColor = .white
+            self.tipsLabel.text = Tips.placeHoop.rawValue
         }
         
         // Add hoop to the center of vertical plane
@@ -184,6 +273,53 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         updatePlaneNode(node, for: planeAnchor)
     }
     
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        
+        sceneView.scene.rootNode.enumerateChildNodes { node, _ in
+            if node.physicsBody?.categoryBitMask == BodyType.ball.rawValue {
+                removeFromScene(node, fallLengh: -10)
+            }
+        }
+    }
+    
+    // MARK: - PhysicsWorld
+    
+    func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
+        
+        if !isBallBeginContactWithRim && isBallEndContactWithRim {
+            
+            if contact.nodeA.physicsBody?.categoryBitMask == BodyType.ball.rawValue && contact.nodeB.physicsBody?.categoryBitMask == BodyType.topPlane.rawValue {
+                
+                
+                isBallBeginContactWithRim = !isBallBeginContactWithRim
+                isBallEndContactWithRim = !isBallEndContactWithRim
+                
+            }
+            
+        }
+        
+        
+    }
+    
+    func physicsWorld(_ world: SCNPhysicsWorld, didEnd contact: SCNPhysicsContact) {
+        
+        if isBallBeginContactWithRim && !isBallEndContactWithRim {
+
+            if contact.nodeA.physicsBody?.categoryBitMask == BodyType.ball.rawValue && contact.nodeB.physicsBody?.categoryBitMask == BodyType.bottomPlane.rawValue {
+                
+                score += 1
+
+                isBallBeginContactWithRim = !isBallBeginContactWithRim
+                isBallEndContactWithRim = !isBallEndContactWithRim
+
+            }
+
+        }
+    }
+    
+    
+    
+    
     
     // MARK: - @IBActions
     
@@ -195,12 +331,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 return
             }
             
-            tipsLabel.text = ""
+            tipsLabel.text = Tips.none.rawValue
             
             sceneView.scene.rootNode.addChildNode(ballNode)
             
         } else {
-        
+            
             let location = sender.location(in: sceneView)
             
             guard let result = sceneView.hitTest(location, types: .existingPlaneUsingExtent).first else {
@@ -210,8 +346,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             guard let anchor = result.anchor as? ARPlaneAnchor, anchor.alignment == .vertical else {
                 return
             }
-        
-            // Get hoop none and set it coordinates
+            
+            // Get hoop node and set it coordinates
             let hoopNode = getHoopNode()
             hoopNode.simdTransform = result.worldTransform
             hoopNode.eulerAngles.x -= .pi / 2
@@ -227,6 +363,5 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
     }
     
-
+    
 }
-
