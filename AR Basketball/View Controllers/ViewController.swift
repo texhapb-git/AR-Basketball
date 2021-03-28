@@ -14,6 +14,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
     @IBOutlet var sceneView: ARSCNView!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var tipsLabel: UILabel!
+    @IBOutlet weak var stackView: UIStackView!
     
     
     // MARK: - Properties
@@ -22,15 +23,17 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
     
     private var isHoopAdded = false {
         didSet {
-            configuration.planeDetection = []
+            
+            configuration.planeDetection = self.isHoopAdded ? [] : [.horizontal, .vertical]
+            configuration.isLightEstimationEnabled = true
             sceneView.session.run(configuration, options: .removeExistingAnchors)
+            
         }
     }
     
     var score: Int = 0 {
         didSet {
             DispatchQueue.main.async {
-                print(self.score)
                 self.scoreLabel.text = "Счёт: \(self.score)"
             }
         }
@@ -54,7 +57,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         sceneView.scene.physicsWorld.contactDelegate = self
         
         // Show statistics such as fps and timing information
-        sceneView.showsStatistics = true
+        sceneView.showsStatistics = false
+        
+        
+        updateUI()
+        
         
     }
     
@@ -63,6 +70,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         
         // Detect vertical planes
         configuration.planeDetection = [.horizontal, .vertical]
+        
+        configuration.isLightEstimationEnabled = true
         
         // Run the view's session
         sceneView.session.run(configuration)
@@ -78,6 +87,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
     
     
     // MARK: - Private Methods
+    
+    private func updateUI() {
+        
+        // Set padding to stackview
+        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        stackView.isLayoutMarginsRelativeArrangement = true
+        
+        stackView.isHidden = true
+        
+    }
     
     private func getBallNode() -> SCNNode? {
         
@@ -135,10 +154,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         
         let hoopNode = SCNNode()
         
-        let board = scene.rootNode.childNode(withName: "board", recursively: false)!
-        let rim = scene.rootNode.childNode(withName: "rim", recursively: false)!
-        let topPlane = scene.rootNode.childNode(withName: "top plane", recursively: false)!
-        let bottomPlane = scene.rootNode.childNode(withName: "bottom plane", recursively: false)!
+        let board = scene.rootNode.childNode(withName: "board", recursively: false)!.clone()
+        let rim = scene.rootNode.childNode(withName: "rim", recursively: false)!.clone()
+        let topPlane = scene.rootNode.childNode(withName: "top plane", recursively: false)!.clone()
+        let bottomPlane = scene.rootNode.childNode(withName: "bottom plane", recursively: false)!.clone()
         
         board.physicsBody = SCNPhysicsBody(
             type: .static,
@@ -149,7 +168,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
                 ]
             )
         )
-        
+ 
         board.physicsBody?.categoryBitMask = BodyType.board.rawValue
         
         rim.physicsBody = SCNPhysicsBody(
@@ -198,7 +217,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         hoopNode.addChildNode(topPlane)
         hoopNode.addChildNode(bottomPlane)
         
-        return hoopNode
+        return hoopNode.clone()
     }
     
     private func getPlaneNode(for plane: ARPlaneAnchor) -> SCNNode {
@@ -240,6 +259,28 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
             node.removeFromParentNode()
         }
         
+    }
+    
+    private func restartGame() {
+        
+        isHoopAdded = false
+        score = 0
+        
+        isBallBeginContactWithRim = false
+        isBallEndContactWithRim = true
+
+        sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+            if node.name != nil {
+                node.removeFromParentNode()
+            }
+                
+        }
+        
+        
+        tipsLabel.text = Tips.startTip.rawValue
+        tipsLabel.textColor = .orange
+        
+        stackView.isHidden = true
     }
     
     
@@ -290,7 +331,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
             
             if contact.nodeA.physicsBody?.categoryBitMask == BodyType.ball.rawValue && contact.nodeB.physicsBody?.categoryBitMask == BodyType.topPlane.rawValue {
                 
-                
                 isBallBeginContactWithRim = !isBallBeginContactWithRim
                 isBallEndContactWithRim = !isBallEndContactWithRim
                 
@@ -332,6 +372,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
             }
             
             tipsLabel.text = Tips.none.rawValue
+            stackView.isHidden = false
             
             sceneView.scene.rootNode.addChildNode(ballNode)
             
@@ -363,5 +404,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         
     }
     
+    @IBAction func restartButtonTapped(_ sender: UIButton) {
+        restartGame()
+        
+    }
     
 }
