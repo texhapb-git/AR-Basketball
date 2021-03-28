@@ -372,7 +372,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
             }
             
             tipsLabel.text = Tips.none.rawValue
-            stackView.isHidden = false
             
             sceneView.scene.rootNode.addChildNode(ballNode)
             
@@ -395,6 +394,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
             
             isHoopAdded = true
             sceneView.scene.rootNode.addChildNode(hoopNode)
+            
+            stackView.isHidden = false
             
             tipsLabel.textColor = .green
             tipsLabel.text = Tips.throwBall.rawValue

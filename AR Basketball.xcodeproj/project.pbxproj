@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		122C6AE2260F943F00BDB917 /* BodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122C6AE1260F943F00BDB917 /* BodyType.swift */; };
+		122C6AEB2610BF9200BDB917 /* 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 122C6AE72610BF9100BDB917 /* 2.png */; };
+		122C6AEC2610BF9200BDB917 /* 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 122C6AE82610BF9200BDB917 /* 3.png */; };
+		122C6AED2610BF9200BDB917 /* 4.png in Resources */ = {isa = PBXBuildFile; fileRef = 122C6AE92610BF9200BDB917 /* 4.png */; };
+		122C6AEE2610BF9200BDB917 /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 122C6AEA2610BF9200BDB917 /* 1.png */; };
 		12A809BB26091AFC006F947D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A809BA26091AFC006F947D /* AppDelegate.swift */; };
 		12A809BD26091AFC006F947D /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 12A809BC26091AFC006F947D /* art.scnassets */; };
 		12A809BF26091AFC006F947D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A809BE26091AFC006F947D /* ViewController.swift */; };
@@ -19,6 +23,10 @@
 
 /* Begin PBXFileReference section */
 		122C6AE1260F943F00BDB917 /* BodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyType.swift; sourceTree = "<group>"; };
+		122C6AE72610BF9100BDB917 /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2.png; sourceTree = "<group>"; };
+		122C6AE82610BF9200BDB917 /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
+		122C6AE92610BF9200BDB917 /* 4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 4.png; sourceTree = "<group>"; };
+		122C6AEA2610BF9200BDB917 /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
 		12A809B726091AFC006F947D /* AR Basketball.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AR Basketball.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		12A809BA26091AFC006F947D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		12A809BC26091AFC006F947D /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -49,6 +57,17 @@
 			path = Scenes;
 			sourceTree = "<group>";
 		};
+		122C6AE52610A79100BDB917 /* Screenshots */ = {
+			isa = PBXGroup;
+			children = (
+				122C6AEA2610BF9200BDB917 /* 1.png */,
+				122C6AE72610BF9100BDB917 /* 2.png */,
+				122C6AE82610BF9200BDB917 /* 3.png */,
+				122C6AE92610BF9200BDB917 /* 4.png */,
+			);
+			path = Screenshots;
+			sourceTree = "<group>";
+		};
 		12A809AE26091AFC006F947D = {
 			isa = PBXGroup;
 			children = (
@@ -68,6 +87,7 @@
 		12A809B926091AFC006F947D /* AR Basketball */ = {
 			isa = PBXGroup;
 			children = (
+				122C6AE52610A79100BDB917 /* Screenshots */,
 				122C6ADE260F3B2300BDB917 /* Scenes */,
 				12E0376B260E067A004960B6 /* Supporting Files */,
 				12E03770260E08AB004960B6 /* Models */,
@@ -171,7 +191,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				12A809BD26091AFC006F947D /* art.scnassets in Resources */,
+				122C6AEE2610BF9200BDB917 /* 1.png in Resources */,
+				122C6AED2610BF9200BDB917 /* 4.png in Resources */,
 				12A809C726091AFF006F947D /* LaunchScreen.storyboard in Resources */,
+				122C6AEB2610BF9200BDB917 /* 2.png in Resources */,
+				122C6AEC2610BF9200BDB917 /* 3.png in Resources */,
 				12A809C426091AFF006F947D /* Assets.xcassets in Resources */,
 				12A809C226091AFC006F947D /* Main.storyboard in Resources */,
 			);
